@@ -1,17 +1,53 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>
-      Tab 1
-    </ion-title>
+    <ion-title> Mi lista de la compra </ion-title>
+    <ion-buttons slot="end">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
+<ion-menu contentId="main" side="end">
+  <ion-header>
     <ion-toolbar>
-      <ion-title size="large">Tab 1</ion-title>
+      <ion-title>Menu</ion-title>
     </ion-toolbar>
   </ion-header>
+  <ion-content class="ion-padding">
+    <ion-list>
+      <ion-item [disabled]="list.length===0" (click)="removeAll()">
+        <ion-label>Eliminar todos los items</ion-label>
+        <ion-icon name="trash-outline" color="danger"></ion-icon>
+      </ion-item>
+    </ion-list>
+  </ion-content>
+</ion-menu>
 
-  <app-explore-container name="Tab 1 page"></app-explore-container>
+<ion-content [fullscreen]="true" id="main">
+  @if(list.length==0){
+  <ion-item lines="none" class="ion-text-center">
+    <ion-label>No hay items en tu lista</ion-label>
+  </ion-item>
+  }
+  <ion-list>
+    <ion-reorder-group
+      [disabled]="false"
+      (ionItemReorder)="onRenderItem($event)"
+    >
+      @for ( item of list; track $index) {
+
+      <ion-item-sliding>
+        <ion-item>
+          <ion-label> {{ item }}</ion-label>
+          <ion-reorder slot="end"></ion-reorder>
+        </ion-item>
+        <ion-item-options side="end">
+          <ion-item-option color="danger" (click)="removeItem(item)">
+            <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+          </ion-item-option>
+        </ion-item-options>
+      </ion-item-sliding>
+      }
+    </ion-reorder-group>
+  </ion-list>
 </ion-content>
